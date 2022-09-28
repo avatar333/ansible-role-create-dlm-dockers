@@ -1,0 +1,54 @@
+---
+# defaults file for ansible-role-create-dlm-dockers
+# REMINDER: GREAT all-in-one compose project for Grafana/Prometheus/Alermanager/CADvisor: https://github.com/stefanprodan/dockprom0
+
+# Directories
+rootcfg: /dockers/config
+rootdnld: /dockers/downloads
+rootdata: /dockers/rootdata
+rootdockprom: /etc/docker/compose
+docker_compose_store: /etc/docker/compose
+
+mnt_root: /mnt
+
+do_delete_images: false
+do_deploy_dockprom: false
+
+dockprom_repository: http://github.com/stefanprodan/dockprom
+
+docker_list:
+  - name: nextcloud
+    image: lscr.io/linuxserver/nextcloud:latest
+    container_name: nextcloud
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Africa/Johannesburg
+    volumes:
+      - "{{ rootdata }}/nextcloud:/data"
+      - "{{ rootcfg }}/nextcloud:/config"
+    ports:
+      - 443:443
+  - name: prowlarr
+    image: lscr.io/linuxserver/prowlarr:develop
+    container_name: prowlarr
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Africa/Johannesburg
+    volumes:
+      - "{{ rootcfg }}/prowlarr:/config"
+    ports:
+      - 9696:9696
+  - name: readarr
+    image: lscr.io/linuxserver/readarr:develop
+    container_name: readarr
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Africa/Johannesburg
+    volumes:
+      - "{{ rootcfg }}/readarr:/config"
+      - "{{ rootdata }}/ubooquity/books:/books"
+    ports:
+      - 8787:8787

@@ -1,0 +1,60 @@
+---
+
+- name: Create base directories (/dockers/config and /dockers/downloads)
+  file:
+    name: "{{ item }}"
+    state: directory
+    mode: 0775
+    owner: kevinp
+    group: kevinp
+  loop:
+    - "{{ rootcfg }}"
+    - "{{ rootdnld }}"
+    - "{{ rootdata }}"
+    - "{{ rootdockprom }}"
+
+- name: Create data/config directories
+  file:
+    name: "{{ item.1.split(':')[0] }}" 
+    state: directory
+    mode: '0775'
+    owner: kevinp
+    group: kevinp
+    recurse: true
+  loop: "{{ docker_list | subelements('volumes') }}"
+
+- name: Create all /etc/docker/compose sub-dirs to store docker-compose.yml files
+  file:
+    name: "{{ docker_compose_store }}/{{ item.name }}"
+    state: directory
+    mode: 0755
+    owner: root
+    owner: root
+  loop: "{{ docker_list }}"
+
+- name: Copy application specific docker-compose.yml files
+  template:
+    src: "docker-compose-template.yml.j2"
+    dest: "{{ docker_compose_store }}/{{ item.name }}/docker-compose.yml"
+    mode: 0755
+    owner: root
+    group: root
+  loop: "{{ docker_list }}"
+  tags: compose_files
+
+- name: Copy application specfic .service files
+  template:
+    src: docker-compose-systemd-template.service.j2
+    dest: "/etc/systemd/system/{{ item.name }}.service"
+  loop: "{{ docker_list }}"
+
+#- name: SystemD daemon re-load
+#  systemd:
+#    daemon_reload: true
+#
+#- name: Set daemons to enabled
+#  systemd:
+#    name: "{{ item.name }}"
+#    enabled: true
+#    state: started
+#  loop: "{{ docker_list }}"

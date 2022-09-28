@@ -1,0 +1,19 @@
+---
+version: "2.1"
+services:
+  {{ item.name }}:
+    image: {{ item.image }}
+    container_name: {{ item.container_name }}
+    environment:
+{% for env in item.environment %}
+      - {{ env }}
+{% endfor %}
+    volumes:
+{% for vols in item.volumes %}
+      - {{ vols }}
+{% endfor %}
+    ports:
+{% for port in item.ports %}
+      - {{ port }}
+{% endfor %}
+    restart: unless-stopped

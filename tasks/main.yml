@@ -1,0 +1,6 @@
+---
+# tasks file for ansible-role-create-dlm-dockers
+
+- import_tasks: 010-basic-setup.yml
+  tags: 010-basic-setup
+
