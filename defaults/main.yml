@@ -4,7 +4,7 @@
 
 # Directories
 rootcfg: /dockers/config
-rootdnld: /dockers/downloads
+rootdnld: /dockers/downloads/downloads
 rootdata: /dockers/rootdata
 rootdockprom: /etc/docker/compose
 docker_compose_store: /etc/docker/compose
@@ -50,5 +50,6 @@ docker_list:
     volumes:
       - "{{ rootcfg }}/readarr:/config"
       - "{{ rootdata }}/ubooquity/books:/books"
+      - "{{ rootdnld }}:/downloads"
     ports:
       - 8787:8787
