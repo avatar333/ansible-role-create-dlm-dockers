@@ -53,3 +53,15 @@ docker_list:
       - "{{ rootdnld }}:/downloads"
     ports:
       - 8787:8787
+  - name: homarr
+    image: ghcr.io/ajnart/homarr:latest
+    container_name: homarr
+    environment:
+      - PUID=1001
+      - PGID=1001
+      - TZ=Africa/Johannesburg
+    volumes:
+      - "{{ rootcfg }}/homarr/configs:/app/data/config"
+      - "{{ rootcfg }}/homarr/icons:/app/data//icons"
+    ports:
+      - 7575:7575
