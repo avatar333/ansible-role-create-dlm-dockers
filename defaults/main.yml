@@ -95,3 +95,12 @@ docker_list:
       - 8000:8000
       - 9000:9000
       - 9443:9443
+  - name: plextraktsync
+    image: lscr.io/linuxserver-labs/plextraktsync:latest
+    container_name: plextraktsync
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Africa/Johannesburg
+    volumes:
+      - "{{ rootcfg }}/plextraktsync:/config"
